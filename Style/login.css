@@ -1,0 +1,89 @@
+
+body {
+    background: #f4faff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 0 10px;
+}
+
+.container {
+    background: #fff;
+    padding: 36px 28px 28px 28px;
+    border-radius: 14px;
+    border: 1px solid #e0e6f0;
+    width: 100%;
+    max-width: 350px;
+    box-shadow: 0 4px 16px 0 rgba(30,53,121,0.07);
+}
+
+h1 {
+    text-align: center;
+    font-size: 26px;
+    color: #1e3579;
+    margin-bottom: 26px;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 15px;
+    color: #1e3579;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.container-campo {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.2px solid #1e3579;
+    border-radius: 8px;
+    background-color: #f8faff;
+    color: #1e3579;
+    font-size: 15.5px;
+    margin-bottom: 18px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.container-campo:focus {
+    outline: none;
+    border-color: #16306a;
+    background-color: #fff;
+    box-shadow: 0 0 0 2px #e0e6f0;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #1e3579;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 14px;
+    transition: background 0.2s, color 0.2s;
+    letter-spacing: 0.5px;
+}
+
+button:hover {
+    background: #16306a;
+    color: #e0e6f0;
+}
+
+a{
+    color: white;
+    text-decoration: none;
+}
+
+label.error {
+    color: red;
+    font-size: 0.9em;
+}

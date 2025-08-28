@@ -1,0 +1,70 @@
+/* Estilo para barra de pesquisa de notas */
+#pesquisa-nota {
+	width: 340px;
+	padding: 12px 18px;
+	border-radius: 24px;
+	border: 1.5px solid #1e3579;
+	font-size: 17px;
+	background: #f7faff;
+	color: #1e3579;
+	box-shadow: 0 2px 8px rgba(30,53,121,0.08);
+	outline: none;
+	transition: border-color 0.2s, box-shadow 0.2s;
+	margin-bottom: 8px;
+    margin-top: 10px;
+}
+#pesquisa-nota:focus {
+	border-color: #4a90e2;
+	box-shadow: 0 4px 16px rgba(30,53,121,0.13);
+	background: #e3eafc;
+}
+body {
+	margin: 0;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	background: linear-gradient(135deg, #e3eafc 0%, #f7faff 100%);
+	color: #222b45;
+	min-height: 100vh;
+}
+
+table {
+	width: 90%;
+	border-collapse: collapse;
+	margin: 48px auto 0 auto;
+	background: #fff;
+	border-radius: 18px;
+	box-shadow: 0 8px 32px 0 rgba(30,53,121,0.13), 0 1.5px 8px 0 rgba(0,0,0,0.07);
+	overflow: hidden;
+	max-width: 1000px;
+}
+th, td {
+	padding: 16px 20px;
+	text-align: center;
+	font-size: 16px;
+}
+th {
+	background: #1e3579;
+	color: #fff;
+	font-weight: 600;
+	letter-spacing: 0.5px;
+	border-bottom: 2px solid #e0e6f0;
+}
+tr:nth-child(even) {
+	background: #f7faff;
+}
+tr:hover {
+	background: #e3eafc;
+}
+td {
+	color: #3a4668;
+}
+caption {
+	caption-side: top;
+	text-align: center;
+	font-size: 22px;
+	color: #1e3579;
+	font-weight: 700;
+	margin-bottom: 18px;
+}
+h1{
+    text-align: center;
+}
