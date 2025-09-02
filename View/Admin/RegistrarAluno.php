@@ -18,6 +18,10 @@
                 <label for="Nome" class="form-label">Nome do Aluno</label>
                 <input type="text" class="form-control" id="Nome" name="Nome" required>
             </div>
+            <div class="mb-3">
+                <label for="DataNascimento" class="form-label">Nome do Aluno</label>
+                <input type="date" class="form-control" id="DataNascimento" name="DataNascimento" required>
+            </div>
             <button type="submit" class="btn btn-primary">Registrar</button>
         </form>
     </div>
