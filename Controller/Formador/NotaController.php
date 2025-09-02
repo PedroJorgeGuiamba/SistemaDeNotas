@@ -9,24 +9,24 @@ class NotaController {
     }
 
     public function exibirNotas() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'formador') {
+        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Formador') {
             header('Location: index.php?error=acesso_negado');
             exit;
         }
         $notas = $this->model->listarNotas();
-        include 'views/notas/list_notas.php';
+        include '../../View/Formador/VisualizarNota.php';
     }
 
     public function exibirLancarNota() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'formador') {
+        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Formador') {
             header('Location: index.php?error=acesso_negado');
             exit;
         }
-        include 'views/notas/lancar_nota.php';
+        include '../../View/Formador/LancarNota.php';
     }
 
     public function realizarLancarNota() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'formador') {
+        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Formador') {
             header('Location: index.php?error=acesso_negado');
             exit;
         }
@@ -53,7 +53,7 @@ class NotaController {
     }
 
     public function exibirEditarNota() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'formador') {
+        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Formador') {
             header('Location: index.php?error=acesso_negado');
             exit;
         }
@@ -67,11 +67,11 @@ class NotaController {
             header('Location: index.php?action=exibir_notas&error=' . urlencode('Nota não encontrada'));
             exit;
         }
-        include 'views/notas/editar_nota.php';
+        include '../../View/Formador/EditarNota.php';
     }
 
     public function realizarEditarNota() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'formador') {
+        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Formador') {
             header('Location: index.php?error=acesso_negado');
             exit;
         }
@@ -96,7 +96,7 @@ class NotaController {
     }
 
     public function realizarExcluirNota() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'formador') {
+        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Formador') {
             header('Location: index.php?error=acesso_negado');
             exit;
         }

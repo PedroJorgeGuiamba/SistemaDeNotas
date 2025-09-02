@@ -9,15 +9,15 @@ class AlunoController {
     }
 
     public function exibirRegistroAluno() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'admin') {
+        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Admin') {
             header('Location: index.php?error=acesso_negado');
             exit;
         }
-        include 'views/admin/register_aluno.php';
+        include __DIR__ . '/../../View/Admin/RegistrarAluno.php';
     }
 
     public function realizarRegistroAluno() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'admin') {
+        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Admin') {
             header('Location: index.php?error=acesso_negado');
             exit;
         }

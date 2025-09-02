@@ -9,15 +9,15 @@ class LecionarController {
     }
 
     public function exibirAtribuicaoModulo() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'admin') {
+        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Admin') {
             header('Location: index.php?error=acesso_negado');
             exit;
         }
-        include 'views/admin/atribuir_modulo.php';
+        include __DIR__ . '/../../View/Admin/AtribuirModuloFormador.php';
     }
 
     public function realizarAtribuicaoModulo() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'admin') {
+        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Admin') {
             header('Location: index.php?error=acesso_negado');
             exit;
         }

@@ -36,19 +36,23 @@ class Nota {
     }
 
     public function obterNota($id) {
-        return $this->enviarRequisicao('GET', null, $id);
+        return $this->enviarRequisicao('GET', [], null, $id);
     }
 
     public function lancarNota($data) {
-        return $this->enviarRequisicao('POST', $data);
+        return $this->enviarRequisicao('POST', [], $data);
     }
 
     public function editarNota($id, $data) {
-        return $this->enviarRequisicao('PUT', $data, $id);
+        return $this->enviarRequisicao('PUT', [], $data, $id);
     }
 
     public function excluirNota($id) {
-        return $this->enviarRequisicao('DELETE', null, $id);
+        return $this->enviarRequisicao('DELETE', [], null, $id);
+    }
+
+    public function listarNotasPorAluno($alunoId) {
+        return $this->enviarRequisicao('GET', ['aluno_id' => $alunoId]);
     }
 }
 ?>

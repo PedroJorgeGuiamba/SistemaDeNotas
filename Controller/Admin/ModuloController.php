@@ -9,15 +9,15 @@ class ModuloController {
     }
 
     public function exibirRegistroModulo() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'admin') {
+        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Admin') {
             header('Location: index.php?error=acesso_negado');
             exit;
         }
-        include 'views/admin/register_modulo.php';
+        include __DIR__ . '/../../View/Admin/RegistrarModulos.php';
     }
 
     public function realizarRegistroModulo() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'admin') {
+        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Admin') {
             header('Location: index.php?error=acesso_negado');
             exit;
         }
@@ -26,7 +26,8 @@ class ModuloController {
             exit;
         }
         $data = [
-            'Nome' => $_POST['Nome']
+            'Nome' => $_POST['Nome'],
+            'CursoID' => $_POST['CursoID']
         ];
         $result = $this->model->registrarModulo($data);
         if (isset($result['error'])) {

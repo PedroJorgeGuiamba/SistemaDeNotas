@@ -9,7 +9,7 @@ class AdminNotaController {
     }
 
     public function exibirNotasAluno() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'admin') {
+        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Admin') {
             header('Location: index.php?error=acesso_negado');
             exit;
         }
@@ -18,17 +18,8 @@ class AdminNotaController {
             header('Location: index.php?error=' . urlencode('ID do aluno não especificado'));
             exit;
         }
-        // Buscar matrículas do aluno para obter notas
-        $stmt = $pdo->prepare('SELECT m.MatriculaID FROM matricula m WHERE m.AlunoID = ?');
-        $stmt->execute([$alunoId]);
-        $matriculas = $stmt->fetchAll(PDO::FETCH_COLUMN);
-        $notas = [];
-        if ($matriculas) {
-            $stmt = $pdo->prepare('SELECT * FROM nota WHERE MatriculaID IN (' . implode(',', array_fill(0, count($matriculas), '?')) . ')');
-            $stmt->execute($matriculas);
-            $notas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-        include 'views/admin/notas_aluno.php';
+        $notas = $this->model->listarNotasPorAluno($alunoId);
+        include __DIR__ . '/../../View/Admin/NotasDoAluno.php';
     }
 }
 ?>

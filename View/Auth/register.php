@@ -27,11 +27,11 @@
                 <input type="password" class="form-control" id="senha" name="senha" required>
             </div>
             <div class="mb-3">
-                <label for="role" class="form-label">Role</label>
-                <select class="form-control" id="role" name="role" required>
-                    <option value="admin">Admin</option>
-                    <option value="formador">Formador</option>
-                    <option value="formando">Formando</option>
+                <label for="tipo" class="form-label">Role</label>
+                <select class="form-control" id="tipo" name="tipo" required>
+                    <option value="Admin">Admin</option>
+                    <option value="Formador">Formador</option>
+                    <option value="Formando">Formando</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Registrar</button>

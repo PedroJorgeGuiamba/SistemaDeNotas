@@ -1,6 +1,6 @@
 <?php
-class Modulo {
-    private $apiUrl = "http://localhost/SistemaDeNotas/Api/api.php?resource=modulos";
+class Curso {
+    private $apiUrl = "http://localhost/SistemaDeNotas/Api/api.php?resource=cursos";
 
     private function enviarRequisicao($method, $data = null) {
         $ch = curl_init();
@@ -21,7 +21,7 @@ class Modulo {
         return json_decode($response, true);
     }
 
-    public function registrarModulo($data) {
+    public function registrarCurso($data) {
         return $this->enviarRequisicao('POST', $data);
     }
 }

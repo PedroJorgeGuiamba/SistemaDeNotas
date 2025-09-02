@@ -24,6 +24,8 @@
             </div>
             <button type="submit" class="btn btn-primary">Entrar</button>
         </form>
+        <!-- <a href="/View/Auth/register.php" class="btn btn-link mt-2">Registrar</a> -->
+        <a href="index.php?action=exibir_registro" class="btn btn-primary">Registrar</a>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

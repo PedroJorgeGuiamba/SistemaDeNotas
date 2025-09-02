@@ -22,55 +22,55 @@ if (!$resource) {
 
 switch ($resource) {
     case 'auth':
-        switch ($method) {
-            case 'POST':
-                if (isset($input['action']) && $input['action'] === 'login') {
-                    if (!isset($input['email']) || !isset($input['senha'])) {
-                        echo json_encode(['error' => 'Dados de login incompletos']);
-                        exit;
-                    }
+    switch ($method) {
+        case 'POST':
+            if (isset($input['action']) && $input['action'] === 'login') {
+                if (!isset($input['email']) || !isset($input['senha'])) {
+                    echo json_encode(['error' => 'Dados de login incompletos']);
+                    exit;
+                }
+                if (!filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
+                    echo json_encode(['error' => 'Email inválido']);
+                    exit;
+                }
+                if (strlen($input['senha']) < 2) {  // Ajuste mínimo conforme necessário
+                    echo json_encode(['error' => 'Senha deve ter pelo menos 6 caracteres']);
+                    exit;
+                }
+                $stmt = $pdo->prepare('SELECT UsuarioId, Tipo, Senha FROM usuario WHERE Email = ?');
+                $stmt->execute([$input['email']]);
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
+                if ($user && $input['senha'] === $user['Senha']) {  // Comparação de texto plano
+                    echo json_encode([
+                        'user_id' => $user['UsuarioId'],
+                        'tipo' => $user['Tipo'],
+                        'message' => 'Login realizado com sucesso'
+                    ]);
+                } else {
+                    echo json_encode(['error' => 'Credenciais inválidas']);
+                }
+            } elseif (isset($input['action']) && $input['action'] === 'register') {
+                if (isset($input['nome'], $input['email'], $input['senha'], $input['tipo'])) {
                     if (!filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
                         echo json_encode(['error' => 'Email inválido']);
                         exit;
                     }
-                    if (strlen($input['senha']) < 6) {
+                    if (strlen($input['senha']) < 2) {
                         echo json_encode(['error' => 'Senha deve ter pelo menos 6 caracteres']);
                         exit;
                     }
-                    $stmt = $pdo->prepare('SELECT id, tipo, senha FROM usuario WHERE email = ?');
-                    $stmt->execute([$input['email']]);
-                    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-                    if ($user && password_verify($input['senha'], $user['senha'])) {
-                        echo json_encode([
-                            'user_id' => $user['id'],
-                            'tipo' => $user['tipo'],
-                            'message' => 'Login realizado com sucesso'
-                        ]);
-                    } else {
-                        echo json_encode(['error' => 'Credenciais inválidas']);
-                    }
-                } elseif (isset($input['action']) && $input['action'] === 'register') {
-                    if (isset($input['nome'], $input['email'], $input['senha'], $input['tipo'])) {
-                        if (!filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
-                            echo json_encode(['error' => 'Email inválido']);
-                            exit;
-                        }
-                        if (strlen($input['senha']) < 6) {
-                            echo json_encode(['error' => 'Senha deve ter pelo menos 6 caracteres']);
-                            exit;
-                        }
-                        $senhaHash = password_hash($input['senha'], PASSWORD_DEFAULT);
-                        $stmt = $pdo->prepare('INSERT INTO usuario (nome, email, senha, tipo) VALUES (?, ?, ?, ?)');
-                        $stmt->execute([$input['nome'], $input['email'], $senhaHash, $input['tipo']]);
-                        $id = $pdo->lastInsertId();
-                        echo json_encode(['id' => $id, 'message' => 'Registrado com sucesso']);
-                    } else {
-                        echo json_encode(['error' => 'Dados incompletos']);
-                    }
+                    $senhaHash = $input['senha'];  // Remova password_hash para texto plano
+                    $stmt = $pdo->prepare('INSERT INTO usuario (Nome, Email, Senha, Tipo) VALUES (?, ?, ?, ?)');
+                    $stmt->execute([$input['nome'], $input['email'], $senhaHash, $input['tipo']]);
+                    $id = $pdo->lastInsertId();
+                    echo json_encode(['id' => $id, 'message' => 'Registrado com sucesso']);
+                } else {
+                    echo json_encode(['error' => 'Dados incompletos']);
                 }
-                break;
-        }
-        break;
+            }
+            break;
+    }
+    break;
 
     case 'notas':
         switch ($method) {
@@ -184,6 +184,26 @@ switch ($resource) {
                     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
                 }
                 break;
+            case 'POST':
+                if (isset($input['Nome'], $input['CursoID'])) {
+                    $nome = trim($input['Nome']);
+                    $cursoID = $input['CursoID'];
+                    if (empty($nome)) {
+                        echo json_encode(['error' => 'Nome do módulo é obrigatório']);
+                        exit;
+                    }
+                    try {
+                        $stmt = $pdo->prepare('INSERT INTO modulo (Nome, CursoID) VALUES (?, ?)');
+                        $stmt->execute([$nome, $cursoID]);
+                        $id = $pdo->lastInsertId();
+                        echo json_encode(['id' => $id, 'message' => 'Módulo registrado com sucesso']);
+                    } catch (PDOException $e) {
+                        echo json_encode(['error' => 'Erro ao registrar o módulo: ' . $e->getMessage()]);
+                    }
+                } else {
+                    echo json_encode(['error' => 'Dados incompletos para registrar módulo']);
+                }
+                break;
         }
         break;
 
@@ -215,6 +235,34 @@ switch ($resource) {
                     echo json_encode(['leciona' => !empty($result)]);
                 } else {
                     echo json_encode(['error' => 'Dados incompletos para verificação']);
+                }
+                break;
+        }
+        break;
+
+    case 'cursos':
+        switch ($method) {
+            case 'GET':
+                $stmt = $pdo->query('SELECT CursoID, Nome FROM curso');
+                echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+                break;
+            case 'POST':
+                if (isset($input['Nome'])) {
+                    $nome = trim($input['Nome']);
+                    if (empty($nome)) {
+                        echo json_encode(['error' => 'Nome do curso é obrigatório']);
+                        exit;
+                    }
+                    try {
+                        $stmt = $pdo->prepare('INSERT INTO curso (Nome) VALUES (?)');
+                        $stmt->execute([$nome]);
+                        $id = $pdo->lastInsertId();
+                        echo json_encode(['id' => $id, 'message' => 'Curso registrado com sucesso']);
+                    } catch (PDOException $e) {
+                        echo json_encode(['error' => 'Erro ao registrar o curso: ' . $e->getMessage()]);
+                    }
+                } else {
+                    echo json_encode(['error' => 'Dados incompletos para registrar curso']);
                 }
                 break;
         }
