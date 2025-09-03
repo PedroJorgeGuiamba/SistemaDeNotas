@@ -23,6 +23,11 @@ if (!$resource) {
 switch ($resource) {
     case 'auth':
     switch ($method) {
+        case 'GET':
+                $stmt = $pdo->query('SELECT a.UsuarioID, a.Nome FROM usuario a');
+                echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+                break;
+
         case 'POST':
             if (isset($input['action']) && $input['action'] === 'login') {
                 if (!isset($input['email']) || !isset($input['senha'])) {
@@ -166,7 +171,7 @@ switch ($resource) {
                         $id = $pdo->lastInsertId();
                         echo json_encode(['id' => $id, 'message' => 'Aluno registrado com sucesso']);
                     } catch (PDOException $e) {
-                        echo json_encode(['error' => 'Erro ao registrar o curso: ' . $e->getMessage()]);
+                        echo json_encode(['error' => 'Erro ao registrar o aluno: ' . $e->getMessage()]);
                     }
                 } else {
                     echo json_encode(['error' => 'Dados incompletos para registrar aluno']);
@@ -177,21 +182,24 @@ switch ($resource) {
 
     case 'formador':
         switch ($method) {
+            case 'GET':
+                $stmt = $pdo->query('SELECT a.FormadorID, a.Nome FROM formador a');
+                echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+                break;
             case 'POST':
-                if (isset($input['Nome'], $input['DataNascimento'])) {
+                if (isset($input['Nome'])) {
                     $nome = trim($input['Nome']);
-                    $dataNascimento = $input['DataNascimento'];
                     if(empty($nome)) {
-                        echo json_encode(['error' => 'Nome do aluno é obrigatório']);
+                        echo json_encode(['error' => 'Nome do formador é obrigatório']);
                         exit;
                     }
                     try {
-                        $stmt = $pdo->prepare('INSERT INTO aluno (Nome, DataNascimento) VALUES (?, ?)');
-                        $stmt->execute([$nome, $dataNascimento]);
+                        $stmt = $pdo->prepare('INSERT INTO formador (Nome) VALUES (?)');
+                        $stmt->execute([$nome]);
                         $id = $pdo->lastInsertId();
-                        echo json_encode(['id' => $id, 'message' => 'Aluno registrado com sucesso']);
+                        echo json_encode(['id' => $id, 'message' => 'Formador registrado com sucesso']);
                     } catch (PDOException $e) {
-                        echo json_encode(['error' => 'Erro ao registrar o curso: ' . $e->getMessage()]);
+                        echo json_encode(['error' => 'Erro ao registrar o formador: ' . $e->getMessage()]);
                     }
                 } else {
                     echo json_encode(['error' => 'Dados incompletos para registrar aluno']);
@@ -211,6 +219,28 @@ switch ($resource) {
                 } else {
                     $stmt = $pdo->query('SELECT TurmaID, Nome FROM turma');
                     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+                }
+                break;
+
+            case 'POST':
+                if (isset($input['Nome'], $input['AnoLectivo'], $input['CursoID'])) {
+                    $nome = trim($input['Nome']);
+                    $anoLectivo = $input['AnoLectivo'];
+                    $cursoId = $input['CursoID'];
+                    if (empty($nome)) {
+                        echo json_encode(['error' => 'Nome da turma é obrigatório']);
+                        exit;
+                    }
+                    try {
+                        $stmt = $pdo->prepare('INSERT INTO turma (Nome, AnoLetivo, CursoID) VALUES (?, ?, ?)');
+                        $stmt->execute([$nome, $anoLectivo, $cursoId]);
+                        $id = $pdo->lastInsertId();
+                        echo json_encode(['id' => $id, 'message' => 'Turma registrado com sucesso']);
+                    } catch (PDOException $e) {
+                        echo json_encode(['error' => 'Erro ao registrar o turma: ' . $e->getMessage()]);
+                    }
+                } else {
+                    echo json_encode(['error' => 'Dados incompletos para registrar turma']);
                 }
                 break;
         }
@@ -265,6 +295,24 @@ switch ($resource) {
                     echo json_encode(['error' => 'Turma não especificada']);
                 }
                 break;
+
+            case 'POST':
+                if (isset($input['AlunoID'], $input['TurmaID'])) {
+                    $alunoID = $input['AlunoID'];
+                    $turmaID = $input['TurmaID'];
+                    
+                    try {
+                        $stmt = $pdo->prepare('INSERT INTO matricula (AlunoID, TurmaID) VALUES (?, ?)');
+                        $stmt->execute([$alunoID, $turmaID]);
+                        $id = $pdo->lastInsertId();
+                        echo json_encode(['id' => $id, 'message' => 'Matricula registrada com sucesso']);
+                    } catch (PDOException $e) {
+                        echo json_encode(['error' => 'Erro ao registrar a Matricula: ' . $e->getMessage()]);
+                    }
+                } else {
+                    echo json_encode(['error' => 'Dados incompletos para registrar Matricula']);
+                }
+                break;
         }
         break;
 
@@ -281,6 +329,25 @@ switch ($resource) {
                     echo json_encode(['leciona' => !empty($result)]);
                 } else {
                     echo json_encode(['error' => 'Dados incompletos para verificação']);
+                }
+                break;
+
+            case 'POST':
+                if (isset($input['FormadorID'], $input['TurmaID'], $input['ModuloID'])) {
+                    $formadorID = $input['FormadorID'];
+                    $turmaID = $input['TurmaID'];
+                    $moduloID = $input['ModuloID'];
+                    
+                    try {
+                        $stmt = $pdo->prepare('INSERT INTO leciona (FormadorID, TurmaID, ModuloID) VALUES (?, ?, ?)');
+                        $stmt->execute([$formadorID, $turmaID, $moduloID]);
+                        $id = $pdo->lastInsertId();
+                        echo json_encode(['id' => $id, 'message' => 'Atribuicao registrada com sucesso']);
+                    } catch (PDOException $e) {
+                        echo json_encode(['error' => 'Erro ao registrar a atribuicao: ' . $e->getMessage()]);
+                    }
+                } else {
+                    echo json_encode(['error' => 'Dados incompletos para registrar atribuicao']);
                 }
                 break;
         }
@@ -313,6 +380,17 @@ switch ($resource) {
                 break;
             }
         break;
+
+    case 'matriculas_com_aluno':
+        $stmt = $pdo->query('
+            SELECT m.MatriculaID, a.Nome AS NomeAluno
+            FROM matricula m
+            JOIN aluno a ON m.AlunoID = a.AlunoID
+        ');
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($rows);
+    break;
+
 
     default:
         echo json_encode(['error' => 'Recurso inválido']);

@@ -26,7 +26,8 @@ class AlunoController {
             exit;
         }
         $data = [
-            'Nome' => $_POST['Nome']
+            'Nome' => $_POST['Nome'],
+            'DataNascimento' => $_POST['DataNascimento']
         ];
         $result = $this->model->registrarAluno($data);
         if (isset($result['error'])) {

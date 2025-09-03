@@ -14,11 +14,14 @@
             <div class="card-header">Ações Administrativas</div>
             <div class="card-body">
                 <a href="index.php?action=exibir_registro_modulo" class="btn btn-primary mb-2">Registrar Módulo</a>
-                <a href="index.php?action=exibir_registro" class="btn btn-primary mb-2">Registrar Formador</a>
+                <a href="index.php?action=exibir_registro_formador" class="btn btn-primary mb-2">Registrar Formador</a>
                 <a href="index.php?action=exibir_registro_aluno" class="btn btn-primary mb-2">Registrar Aluno</a>
                 <a href="index.php?action=exibir_atribuicao_modulo" class="btn btn-primary mb-2">Atribuir Módulo a Formador</a>
                 <a href="index.php?action=exibir_notas_aluno" class="btn btn-primary mb-2">Visualizar Notas dos Alunos</a>
                 <a href="index.php?action=exibir_registro_curso" class="btn btn-primary mb-2">Registrar Curso</a>
+                <a href="index.php?action=exibir_registro_turma" class="btn btn-primary mb-2">Registrar Turma</a>
+                <a href="index.php?action=exibir_registro_matricula" class="btn btn-primary mb-2">Registrar Matricula</a>
+                <a href="index.php?action=exibir_lancar_nota" class="btn btn-primary mb-2">Lancar Nota</a>
             </div>
         </div>
         <div class="card">
@@ -33,8 +36,23 @@
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $modulos = json_decode(curl_exec($ch), true);
                 curl_close($ch);
+                $ch = curl_init("http://localhost/SistemaDeNotas/Api/api.php?resource=turmas");
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $turmas = json_decode(curl_exec($ch), true);
+                curl_close($ch);
+                $ch = curl_init("http://localhost/SistemaDeNotas/Api/api.php?resource=formador");
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $formadores = json_decode(curl_exec($ch), true);
+                curl_close($ch);
+                $ch = curl_init("http://localhost/SistemaDeNotas/Api/api.php?resource=cursos");
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $cursos = json_decode(curl_exec($ch), true);
+                curl_close($ch);
                 echo '<p><strong>Total de Alunos:</strong> ' . (isset($alunos['error']) ? 0 : count($alunos)) . '</p>';
                 echo '<p><strong>Total de Módulos:</strong> ' . (isset($modulos['error']) ? 0 : count($modulos)) . '</p>';
+                echo '<p><strong>Total de Turmas:</strong> ' . (isset($turmas['error']) ? 0 : count($turmas)) . '</p>';
+                echo '<p><strong>Total de Formadores:</strong> ' . (isset($formadores['error']) ? 0 : count($formadores)) . '</p>';
+                echo '<p><strong>Total de Cursos:</strong> ' . (isset($cursos['error']) ? 0 : count($cursos)) . '</p>';
                 ?>
             </div>
         </div>

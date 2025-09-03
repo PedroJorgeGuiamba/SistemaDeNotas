@@ -1,6 +1,6 @@
 <?php
 class Lecionar {
-    private $apiUrl = "http://localhost/SistemaDeNotas/api/api.php?resource=lecionar";
+    private $apiUrl = "http://localhost/SistemaDeNotas/Api/api.php?resource=lecionar";
 
     private function enviarRequisicao($method, $data = null) {
         $ch = curl_init();

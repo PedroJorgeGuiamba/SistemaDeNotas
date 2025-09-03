@@ -14,7 +14,7 @@ class NotaController {
             exit;
         }
         $notas = $this->model->listarNotas();
-        include '../../View/Formador/VisualizarNota.php';
+        include __DIR__ . '/../../View/Formador/VisualizarNota.php';
     }
 
     public function exibirLancarNota() {
@@ -22,7 +22,7 @@ class NotaController {
             header('Location: index.php?error=acesso_negado');
             exit;
         }
-        include '../../View/Formador/LancarNota.php';
+        include __DIR__ . '/../../View/Formador/LancarNota.php';
     }
 
     public function realizarLancarNota() {
@@ -67,7 +67,7 @@ class NotaController {
             header('Location: index.php?action=exibir_notas&error=' . urlencode('Nota não encontrada'));
             exit;
         }
-        include '../../View/Formador/EditarNota.php';
+        include __DIR__ . '/../../View/Formador/EditarNota.php';
     }
 
     public function realizarEditarNota() {

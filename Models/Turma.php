@@ -1,6 +1,6 @@
 <?php
-class Formador {
-    private $apiUrl = "http://localhost/SistemaDeNotas/Api/api.php?resource=formador";
+class Turma {
+    private $apiUrl = "http://localhost/SistemaDeNotas/Api/api.php?resource=turmas";
 
     private function enviarRequisicao($method, $data = null) {
         $ch = curl_init();
@@ -21,7 +21,7 @@ class Formador {
         return json_decode($response, true);
     }
 
-    public function registrarFormador($data) {
+    public function registrarTurma($data) {
         return $this->enviarRequisicao('POST', $data);
     }
 }

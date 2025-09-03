@@ -3,20 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel do Administrador</title>
+    <title>Painel do Formador</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container mt-5">
-        <h2>Painel do Administrador</h2>
+        <h2>Painel do Formador</h2>
         <p>Bem-vindo, <?php echo htmlspecialchars($_SESSION['tipo']); ?>!</p>
         <div class="card mb-3">
             <div class="card-header">Ações Administrativas</div>
             <div class="card-body">
-                <a href="index.php?action=exibir_registro_modulo" class="btn btn-primary mb-2">Registrar Módulo</a>
-                <a href="index.php?action=exibir_registro" class="btn btn-primary mb-2">Registrar Formador</a>
-                <a href="index.php?action=exibir_registro_aluno" class="btn btn-primary mb-2">Registrar Aluno</a>
-                <a href="index.php?action=exibir_atribuicao_modulo" class="btn btn-primary mb-2">Atribuir Módulo a Formador</a>
+                <a href="index.php?action=exibir_lancar_nota" class="btn btn-primary mb-2">Lancar Nota</a>
                 <a href="index.php?action=exibir_notas_aluno" class="btn btn-primary mb-2">Visualizar Notas dos Alunos</a>
             </div>
         </div>

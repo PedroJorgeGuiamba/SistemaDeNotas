@@ -1,16 +1,17 @@
 <?php
-class MatriculaApi {
+class Matricula {
     private $apiUrl = "http://localhost/SistemaDeNotas/Api/api.php?resource=matriculas";
 
-    private function enviarRequisicao($method, $params = null) {
+    private function enviarRequisicao($method, $data = null) {
         $ch = curl_init();
-        $url = $this->apiUrl;
-        if ($params) {
-            $url .= '&' . http_build_query($params);
-        }
-        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_URL, $this->apiUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+
+        if ($method === 'POST') {
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        }
 
         $response = curl_exec($ch);
         if ($response === false) {
@@ -20,9 +21,8 @@ class MatriculaApi {
         return json_decode($response, true);
     }
 
-    public function listarMatriculasTurma($turmaId) {
-        $params = ['turma_id' => $turmaId];
-        return $this->enviarRequisicao('GET', $params);
+    public function registrarMatricula($data) {
+        return $this->enviarRequisicao('POST', $data);
     }
 }
 ?>

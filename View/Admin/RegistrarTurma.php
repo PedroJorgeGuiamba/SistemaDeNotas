@@ -8,16 +8,17 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h2>Registrar Módulo</h2>
+        <h2>Registrar Turmas</h2>
         <?php if (isset($_GET['error'])): ?>
             <div class="alert alert-danger"><?php echo htmlspecialchars(urldecode($_GET['error'])); ?></div>
         <?php endif; ?>
         <form action="index.php" method="POST">
-            <input type="hidden" name="action" value="realizar_registro_modulo">
+            <input type="hidden" name="action" value="realizar_registro_turma">
             <div class="mb-3">
-                <label for="Nome" class="form-label">Nome do Módulo</label>
+                <label for="Nome" class="form-label">Nome da Turma</label>
                 <input type="text" class="form-control" id="Nome" name="Nome" required>
             </div>
+
             <div class="mb-3">
                 <label for="CursoID" class="form-label">Curso</label>
                 <select class="form-control" id="CursoID" name="CursoID" required>
@@ -38,7 +39,14 @@
                     ?>
                 </select>
             </div>
+
+            <div class="mb-3">
+                <label for="AnoLectivo" class="form-label">Ano Lectivo</label>
+                <input type="number" class="form-control" id="AnoLectivo" name="AnoLectivo" required>
+            </div>
+
             <button type="submit" class="btn btn-primary">Registrar</button>
+
         </form>
 
         <a href="index.php" class="btn btn-secondary">Voltar</a>

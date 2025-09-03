@@ -1,13 +1,17 @@
 <?php
 session_start();
-var_dump($_SESSION); // Depuração
-require_once __DIR__ ."/Controller/Auth/UserController.php";
-require_once __DIR__ ."/Controller/Formador/NotaController.php";
-require_once __DIR__ ."/Controller/Admin/ModuloController.php";
-require_once __DIR__ ."/Controller/Admin/AlunoController.php";
-require_once __DIR__ ."/Controller/Admin/LecionarController.php";
-require_once __DIR__ ."/Controller/Admin/AdminNotaController.php";
+// var_dump($_SESSION); // Depuração
+require_once __DIR__ . "/Controller/Auth/UserController.php";
+require_once __DIR__ . "/Controller/Formador/NotaController.php";
+require_once __DIR__ . "/Controller/Admin/ModuloController.php";
+require_once __DIR__ . "/Controller/Admin/AlunoController.php";
+require_once __DIR__ . "/Controller/Admin/LecionarController.php";
+require_once __DIR__ . "/Controller/Admin/AdminNotaController.php";
 require_once __DIR__ . "/Controller/Admin/CursoController.php";
+require_once __DIR__ . "/Controller/Admin/FormadorController.php";
+require_once __DIR__ . "/Controller/Admin/TurmaController.php";
+require_once __DIR__ . "/Controller/Admin/MatriculaController.php";
+
 
 $action = isset($_POST['action']) ? $_POST['action'] : (isset($_GET['action']) ? $_GET['action'] : 'index');
 
@@ -18,6 +22,9 @@ $alunoController = new AlunoController();
 $lecionarController = new LecionarController();
 $adminNotaController = new AdminNotaController();
 $cursoController = new CursoController();
+$formadorController = new FormadorController();
+$turmaController = new TurmaController();
+$matriculaController = new MatriculaController();
 
 switch ($action) {
     case 'exibir_login':
@@ -80,6 +87,25 @@ switch ($action) {
     case 'exibir_lista_cursos':
         $cursoController->exibirListaCursos();
         break;
+    case 'realizar_registro_formador':
+        $formadorController->realizarRegistroFormador();
+        break;
+    case 'exibir_registro_formador':
+        $formadorController->exibirRegistroFormador();
+        break;
+    case 'exibir_registro_turma':
+        $turmaController->exibirRegistroTurma();
+        break;
+    case 'realizar_registro_turma':
+        $turmaController->realizarRegistroTurma();
+        break;
+    case 'exibir_registro_matricula':
+        $matriculaController->exibirRegistroMatricula();
+        break;
+    case 'realizar_registro_matricula':
+        $matriculaController->realizarRegistroMatricula();
+        break;
+
     default:
         if (isset($_SESSION['user_id'])) {
             if ($_SESSION['tipo'] === 'Formador') {

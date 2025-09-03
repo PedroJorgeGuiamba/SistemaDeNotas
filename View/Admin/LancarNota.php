@@ -3,37 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atribuir Módulo a Formador</title>
+    <title>Registrar Módulo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container mt-5">
-        <h2>Atribuir Módulo a Formador</h2>
+        <h2>Lançar Notas</h2>
         <?php if (isset($_GET['error'])): ?>
             <div class="alert alert-danger"><?php echo htmlspecialchars(urldecode($_GET['error'])); ?></div>
         <?php endif; ?>
         <form action="index.php" method="POST">
-            <input type="hidden" name="action" value="realizar_atribuicao_modulo">
+            <input type="hidden" name="action" value="realizar_lancar_nota">
             <div class="mb-3">
-                <label for="TurmaID" class="form-label">Turma</label>
-                <select class="form-control" id="TurmaID" name="TurmaID" required>
-                    <option value="">Selecione uma turma</option>
+                <label for="Periodo" class="form-label">Periodo</label>
+                <input type="text" class="form-control" id="Periodo" name="Periodo" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="MatriculaID" class="form-label">Aluno (Matrícula)</label>
+                <select class="form-control" id="MatriculaID" name="MatriculaID" required>
+                    <option value="">Selecione um aluno</option>
                     <?php
-                    // Buscar cursos da API
-                    $ch = curl_init("http://localhost/SistemaDeNotas/Api/api.php?resource=turmas");
+                    // Buscar matriculas com aluno
+                    $ch = curl_init("http://localhost/SistemaDeNotas/Api/api.php?resource=matriculas_com_aluno");
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    $turmas = json_decode(curl_exec($ch), true);
+                    $matriculas = json_decode(curl_exec($ch), true);
                     curl_close($ch);
-                    if ($turmas && !isset($turmas['error'])) {
-                        foreach ($turmas as $turma) {
-                            echo '<option value="' . htmlspecialchars($turma['TurmaID']) . '">' . htmlspecialchars($turma['Nome']) . '</option>';
+
+                    if ($matriculas && !isset($matriculas['error'])) {
+                        foreach ($matriculas as $mat) {
+                            echo '<option value="' . htmlspecialchars($mat['MatriculaID']) . '">' . htmlspecialchars($mat['NomeAluno']) . '</option>';
                         }
                     } else {
-                        echo '<option value="">Nenhuma turma disponível</option>';
+                        echo '<option value="">Nenhum aluno disponível</option>';
                     }
                     ?>
                 </select>
             </div>
+
 
             <div class="mb-3">
                 <label for="ModuloID" class="form-label">Modulo</label>
@@ -56,28 +63,16 @@
                 </select>
             </div>
 
+
             <div class="mb-3">
-                <label for="FormadorID" class="form-label">Formador</label>
-                <select class="form-control" id="FormadorID" name="FormadorID" required>
-                    <option value="">Selecione um Formador</option>
-                    <?php
-                    // Buscar cursos da API
-                    $ch = curl_init("http://localhost/SistemaDeNotas/Api/api.php?resource=formador");
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    $formadores = json_decode(curl_exec($ch), true);
-                    curl_close($ch);
-                    if ($formadores && !isset($formadores['error'])) {
-                        foreach ($formadores as $formador) {
-                            echo '<option value="' . htmlspecialchars($formador['FormadorID']) . '">' . htmlspecialchars($formador['Nome']) . '</option>';
-                        }
-                    } else {
-                        echo '<option value="">Nenhum Formador disponível</option>';
-                    }
-                    ?>
-                </select>
+                <label for="Valor" class="form-label">Valor</label>
+                <input type="text" class="form-control" id="Valor" name="Valor" required>
             </div>
-            <button type="submit" class="btn btn-primary">Atribuir</button>
+
+            <button type="submit" class="btn btn-primary">Registrar</button>
+
         </form>
+
         <a href="index.php" class="btn btn-secondary">Voltar</a>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
