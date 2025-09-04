@@ -9,24 +9,24 @@ class NotaController {
     }
 
     public function exibirNotas() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Formador') {
+        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Admin') {
             header('Location: index.php?error=acesso_negado');
             exit;
         }
         $notas = $this->model->listarNotas();
-        include __DIR__ . '/../../View/Formador/VisualizarNota.php';
+        include __DIR__ . '/../../View/Admin/VisualizarNota.php';
     }
 
     public function exibirLancarNota() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Formador') {
+        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Admin') {
             header('Location: index.php?error=acesso_negado');
             exit;
         }
-        include __DIR__ . '/../../View/Formador/LancarNota.php';
+        include __DIR__ . '/../../View/Admin/LancarNota.php';
     }
 
     public function realizarLancarNota() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Formador') {
+        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Admin') {
             header('Location: index.php?error=acesso_negado');
             exit;
         }
@@ -53,7 +53,7 @@ class NotaController {
     }
 
     public function exibirEditarNota() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Formador') {
+        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Admin') {
             header('Location: index.php?error=acesso_negado');
             exit;
         }
@@ -71,7 +71,7 @@ class NotaController {
     }
 
     public function realizarEditarNota() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Formador') {
+        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Admin') {
             header('Location: index.php?error=acesso_negado');
             exit;
         }
@@ -96,7 +96,7 @@ class NotaController {
     }
 
     public function realizarExcluirNota() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Formador') {
+        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Admin') {
             header('Location: index.php?error=acesso_negado');
             exit;
         }

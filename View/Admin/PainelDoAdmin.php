@@ -17,7 +17,7 @@
                 <a href="index.php?action=exibir_registro_formador" class="btn btn-primary mb-2">Registrar Formador</a>
                 <a href="index.php?action=exibir_registro_aluno" class="btn btn-primary mb-2">Registrar Aluno</a>
                 <a href="index.php?action=exibir_atribuicao_modulo" class="btn btn-primary mb-2">Atribuir Módulo a Formador</a>
-                <a href="index.php?action=exibir_notas_aluno" class="btn btn-primary mb-2">Visualizar Notas dos Alunos</a>
+                <a href="index.php?action=exibir_notas" class="btn btn-primary mb-2">Visualizar Notas dos Alunos</a>
                 <a href="index.php?action=exibir_registro_curso" class="btn btn-primary mb-2">Registrar Curso</a>
                 <a href="index.php?action=exibir_registro_turma" class="btn btn-primary mb-2">Registrar Turma</a>
                 <a href="index.php?action=exibir_registro_matricula" class="btn btn-primary mb-2">Registrar Matricula</a>

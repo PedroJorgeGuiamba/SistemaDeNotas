@@ -79,22 +79,40 @@ switch ($resource) {
 
     case 'notas':
         switch ($method) {
+            // case 'GET':
+            //     if ($id) {
+            //         $stmt = $pdo->prepare('SELECT * FROM nota WHERE NotaID = ?');
+            //         $stmt->execute([$id]);
+            //         echo json_encode($stmt->fetch(PDO::FETCH_ASSOC));
+            //     } else {
+            //         $stmt = $pdo->query('SELECT * FROM nota');
+            //         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+            //     }
+            //     break;
             case 'GET':
-                if ($id) {
-                    $stmt = $pdo->prepare('SELECT * FROM nota WHERE NotaID = ?');
-                    $stmt->execute([$id]);
-                    echo json_encode($stmt->fetch(PDO::FETCH_ASSOC));
-                } else {
-                    $stmt = $pdo->query('SELECT * FROM nota');
-                    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
-                }
+                $stmt = $pdo->query("
+                    SELECT n.NotaID,
+                        n.MatriculaID,
+                        a.Nome AS NomeAluno,
+                        n.ModuloID,
+                        m.Nome AS NomeModulo,
+                        n.Periodo,
+                        n.Valor
+                    FROM nota n
+                    JOIN matricula mt ON n.MatriculaID = mt.MatriculaID
+                    JOIN aluno a ON mt.AlunoID = a.AlunoID
+                    JOIN modulo m ON n.ModuloID = m.ModuloID
+                ");
+                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo json_encode($rows);
                 break;
+
             case 'POST':
                 if (isset($input['MatriculaID'], $input['ModuloID'], $input['Periodo'], $input['Valor'])) {
-                    if (!is_numeric($input['Valor']) || $input['Valor'] < 0 || $input['Valor'] > 20) {
-                        echo json_encode(['error' => 'Valor da nota deve ser um número entre 0 e 20']);
-                        exit;
-                    }
+                    // if (!is_numeric($input['Valor']) || $input['Valor'] < 0 || $input['Valor'] > 20) {
+                    //     echo json_encode(['error' => 'Valor da nota deve ser um número entre 0 e 20']);
+                    //     exit;
+                    // }
                     // Verificar se o formador leciona o módulo na turma da matrícula
                     $matriculaId = (int)$input['MatriculaID'];
                     $moduloId = (int)$input['ModuloID'];
@@ -111,7 +129,7 @@ switch ($resource) {
                         echo json_encode(['error' => 'ID do formador não fornecido']);
                         exit;
                     }
-                    $stmt = $pdo->prepare('SELECT LecionaID FROM lecionar WHERE FormadorID = ? AND ModuloID = ? AND TurmaID = ?');
+                    $stmt = $pdo->prepare('SELECT LecionaID FROM leciona WHERE FormadorID = ? AND ModuloID = ? AND TurmaID = ?');
                     $stmt->execute([$formadorId, $moduloId, $turmaId]);
                     if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
                         echo json_encode(['error' => 'Você não leciona este módulo nesta turma']);

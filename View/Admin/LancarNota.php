@@ -19,12 +19,33 @@
                 <input type="text" class="form-control" id="Periodo" name="Periodo" required>
             </div>
 
-            <div class="mb-3">
+            <!-- <div class="mb-3">
                 <label for="MatriculaID" class="form-label">Aluno (Matrícula)</label>
                 <select class="form-control" id="MatriculaID" name="MatriculaID" required>
                     <option value="">Selecione um aluno</option>
                     <?php
                     // Buscar matriculas com aluno
+                    $ch = curl_init("http://localhost/SistemaDeNotas/Api/api.php?resource=matriculas_com_aluno");
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    $matriculas = json_decode(curl_exec($ch), true);
+                    curl_close($ch);
+
+                    if ($matriculas && !isset($matriculas['error'])) {
+                        foreach ($matriculas as $mat) {
+                            echo '<option value="' . htmlspecialchars($mat['MatriculaID']) . '">' . htmlspecialchars($mat['NomeAluno']) . '</option>';
+                        }
+                    } else {
+                        echo '<option value="">Nenhum aluno disponível</option>';
+                    }
+                    ?>
+                </select>
+            </div> -->
+
+            <div class="mb-3">
+                <label for="MatriculaID" class="form-label">Aluno (Matrícula)</label>
+                <select class="form-control" id="MatriculaID" name="MatriculaID" required>
+                    <option value="">Selecione um aluno</option>
+                    <?php
                     $ch = curl_init("http://localhost/SistemaDeNotas/Api/api.php?resource=matriculas_com_aluno");
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     $matriculas = json_decode(curl_exec($ch), true);

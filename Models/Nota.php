@@ -10,11 +10,12 @@ class Nota {
         }
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
 
+        $headers = ['Content-Type: application/json'];
         if (isset($_SESSION['user_id']) && $method === 'POST') {
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'X-Formador-ID: ' . $_SESSION['user_id']]);
+            $headers[] = 'X-Formador-ID: ' . $_SESSION['user_id'];
         }
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
         if ($method === 'POST' || $method === 'PUT') {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
@@ -31,25 +32,27 @@ class Nota {
         return json_decode($response, true);
     }
 
+
     public function listarNotas() {
         return $this->enviarRequisicao('GET');
     }
 
     public function obterNota($id) {
-        return $this->enviarRequisicao('GET', [], null, $id);
+        return $this->enviarRequisicao('GET', null, $id);
     }
 
     public function lancarNota($data) {
-        return $this->enviarRequisicao('POST', [], $data);
+        return $this->enviarRequisicao('POST', $data);
     }
 
     public function editarNota($id, $data) {
-        return $this->enviarRequisicao('PUT', [], $data, $id);
+        return $this->enviarRequisicao('PUT', $data, $id);
     }
 
     public function excluirNota($id) {
-        return $this->enviarRequisicao('DELETE', [], null, $id);
+        return $this->enviarRequisicao('DELETE', null, $id);
     }
+
 
     public function listarNotasPorAluno($alunoId) {
         return $this->enviarRequisicao('GET', ['aluno_id' => $alunoId]);
