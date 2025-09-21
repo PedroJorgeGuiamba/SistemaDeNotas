@@ -71,7 +71,7 @@ class NotaController {
     }
 
     public function realizarEditarNota() {
-        if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'Admin') {
+        if (!isset($_SESSION['tipo'])) {
             header('Location: index.php?error=acesso_negado');
             exit;
         }

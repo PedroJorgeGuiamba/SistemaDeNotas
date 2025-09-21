@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/../../middleware/auth.php'; // protege a página e inicia a sessão
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 

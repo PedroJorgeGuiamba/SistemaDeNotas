@@ -105,6 +105,9 @@ switch ($action) {
     case 'realizar_registro_matricula':
         $matriculaController->realizarRegistroMatricula();
         break;
+    case 'logout':
+        $userController->logout();
+        break;
 
     default:
         if (isset($_SESSION['user_id'])) {

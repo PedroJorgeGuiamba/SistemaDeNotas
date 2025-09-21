@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/../../middleware/auth.php'; // protege a página e inicia a sessão
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -56,7 +60,7 @@
                 ?>
             </div>
         </div>
-        <a href="index.php?action=exibir_login" class="btn btn-secondary mt-3">Sair</a>
+        <a href="index.php?action=logout" class="btn btn-secondary mt-3">Sair</a>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

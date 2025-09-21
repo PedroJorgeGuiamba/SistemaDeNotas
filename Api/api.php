@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ ."/../Conexao/conector.php";
+require_once __DIR__ . "/../Conexao/conector.php";
 
 header('Content-Type: application/json');
 
@@ -22,98 +22,102 @@ if (!$resource) {
 
 switch ($resource) {
     case 'auth':
-    switch ($method) {
-        case 'GET':
+        switch ($method) {
+            case 'GET':
                 $stmt = $pdo->query('SELECT a.UsuarioID, a.Nome FROM usuario a');
                 echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
                 break;
 
-        case 'POST':
-            if (isset($input['action']) && $input['action'] === 'login') {
-                if (!isset($input['email']) || !isset($input['senha'])) {
-                    echo json_encode(['error' => 'Dados de login incompletos']);
-                    exit;
-                }
-                if (!filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
-                    echo json_encode(['error' => 'Email inválido']);
-                    exit;
-                }
-                if (strlen($input['senha']) < 2) {  // Ajuste mínimo conforme necessário
-                    echo json_encode(['error' => 'Senha deve ter pelo menos 6 caracteres']);
-                    exit;
-                }
-                $stmt = $pdo->prepare('SELECT UsuarioId, Tipo, Senha FROM usuario WHERE Email = ?');
-                $stmt->execute([$input['email']]);
-                $user = $stmt->fetch(PDO::FETCH_ASSOC);
-                if ($user && $input['senha'] === $user['Senha']) {  // Comparação de texto plano
-                    echo json_encode([
-                        'user_id' => $user['UsuarioId'],
-                        'tipo' => $user['Tipo'],
-                        'message' => 'Login realizado com sucesso'
-                    ]);
-                } else {
-                    echo json_encode(['error' => 'Credenciais inválidas']);
-                }
-            } elseif (isset($input['action']) && $input['action'] === 'register') {
-                if (isset($input['nome'], $input['email'], $input['senha'], $input['tipo'])) {
+            case 'POST':
+                if (isset($input['action']) && $input['action'] === 'login') {
+                    if (!isset($input['email']) || !isset($input['senha'])) {
+                        echo json_encode(['error' => 'Dados de login incompletos']);
+                        exit;
+                    }
                     if (!filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
                         echo json_encode(['error' => 'Email inválido']);
                         exit;
                     }
-                    if (strlen($input['senha']) < 2) {
+                    if (strlen($input['senha']) < 2) {  // Ajuste mínimo conforme necessário
                         echo json_encode(['error' => 'Senha deve ter pelo menos 6 caracteres']);
                         exit;
                     }
-                    $senhaHash = $input['senha'];  // Remova password_hash para texto plano
-                    $stmt = $pdo->prepare('INSERT INTO usuario (Nome, Email, Senha, Tipo) VALUES (?, ?, ?, ?)');
-                    $stmt->execute([$input['nome'], $input['email'], $senhaHash, $input['tipo']]);
-                    $id = $pdo->lastInsertId();
-                    echo json_encode(['id' => $id, 'message' => 'Registrado com sucesso']);
-                } else {
-                    echo json_encode(['error' => 'Dados incompletos']);
+                    $stmt = $pdo->prepare('SELECT UsuarioId, Tipo, Senha FROM usuario WHERE Email = ?');
+                    $stmt->execute([$input['email']]);
+                    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+                    if ($user && $input['senha'] === $user['Senha']) {  // Comparação de texto plano
+                        echo json_encode([
+                            'user_id' => $user['UsuarioId'],
+                            'tipo' => $user['Tipo'],
+                            'message' => 'Login realizado com sucesso'
+                        ]);
+                    } else {
+                        echo json_encode(['error' => 'Credenciais inválidas']);
+                    }
+                } elseif (isset($input['action']) && $input['action'] === 'register') {
+                    if (isset($input['nome'], $input['email'], $input['senha'], $input['tipo'])) {
+                        if (!filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
+                            echo json_encode(['error' => 'Email inválido']);
+                            exit;
+                        }
+                        if (strlen($input['senha']) < 2) {
+                            echo json_encode(['error' => 'Senha deve ter pelo menos 6 caracteres']);
+                            exit;
+                        }
+                        $senhaHash = $input['senha'];
+                        $stmt = $pdo->prepare('INSERT INTO usuario (Nome, Email, Senha, Tipo) VALUES (?, ?, ?, ?)');
+                        $stmt->execute([$input['nome'], $input['email'], $senhaHash, $input['tipo']]);
+                        $id = $pdo->lastInsertId();
+                        echo json_encode(['id' => $id, 'message' => 'Registrado com sucesso']);
+                    } else {
+                        echo json_encode(['error' => 'Dados incompletos']);
+                    }
                 }
-            }
-            break;
-    }
-    break;
+                break;
+        }
+        break;
 
     case 'notas':
         switch ($method) {
-            // case 'GET':
-            //     if ($id) {
-            //         $stmt = $pdo->prepare('SELECT * FROM nota WHERE NotaID = ?');
-            //         $stmt->execute([$id]);
-            //         echo json_encode($stmt->fetch(PDO::FETCH_ASSOC));
-            //     } else {
-            //         $stmt = $pdo->query('SELECT * FROM nota');
-            //         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
-            //     }
-            //     break;
             case 'GET':
-                $stmt = $pdo->query("
-                    SELECT n.NotaID,
-                        n.MatriculaID,
-                        a.Nome AS NomeAluno,
-                        n.ModuloID,
-                        m.Nome AS NomeModulo,
-                        n.Periodo,
-                        n.Valor
-                    FROM nota n
-                    JOIN matricula mt ON n.MatriculaID = mt.MatriculaID
-                    JOIN aluno a ON mt.AlunoID = a.AlunoID
-                    JOIN modulo m ON n.ModuloID = m.ModuloID
-                ");
-                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                echo json_encode($rows);
+                if ($id) {
+                    $stmt = $pdo->prepare("
+            SELECT n.NotaID,
+                    n.MatriculaID,
+                    a.Nome AS NomeAluno,
+                    n.ModuloID,
+                    m.Nome AS NomeModulo,
+                    n.Periodo,
+                    n.Valor
+            FROM nota n
+            JOIN matricula mt ON n.MatriculaID = mt.MatriculaID
+            JOIN aluno a ON mt.AlunoID = a.AlunoID
+            JOIN modulo m ON n.ModuloID = m.ModuloID
+            WHERE n.NotaID = ?
+        ");
+                    $stmt->execute([$id]);
+                    echo json_encode($stmt->fetch(PDO::FETCH_ASSOC));
+                } else {
+                    $stmt = $pdo->query("
+            SELECT n.NotaID,
+                    n.MatriculaID,
+                    a.Nome AS NomeAluno,
+                    n.ModuloID,
+                    m.Nome AS NomeModulo,
+                    n.Periodo,
+                    n.Valor
+            FROM nota n
+            JOIN matricula mt ON n.MatriculaID = mt.MatriculaID
+            JOIN aluno a ON mt.AlunoID = a.AlunoID
+            JOIN modulo m ON n.ModuloID = m.ModuloID
+        ");
+                    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+                }
                 break;
+
 
             case 'POST':
                 if (isset($input['MatriculaID'], $input['ModuloID'], $input['Periodo'], $input['Valor'])) {
-                    // if (!is_numeric($input['Valor']) || $input['Valor'] < 0 || $input['Valor'] > 20) {
-                    //     echo json_encode(['error' => 'Valor da nota deve ser um número entre 0 e 20']);
-                    //     exit;
-                    // }
-                    // Verificar se o formador leciona o módulo na turma da matrícula
                     $matriculaId = (int)$input['MatriculaID'];
                     $moduloId = (int)$input['ModuloID'];
                     $stmt = $pdo->prepare('SELECT m.TurmaID FROM matricula m WHERE m.MatriculaID = ?');
@@ -174,12 +178,12 @@ switch ($resource) {
                 $stmt = $pdo->query('SELECT a.AlunoID, a.Nome FROM aluno a');
                 echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
                 break;
-            
+
             case 'POST':
                 if (isset($input['Nome'], $input['DataNascimento'])) {
                     $nome = trim($input['Nome']);
                     $dataNascimento = $input['DataNascimento'];
-                    if(empty($nome)) {
+                    if (empty($nome)) {
                         echo json_encode(['error' => 'Nome do aluno é obrigatório']);
                         exit;
                     }
@@ -207,7 +211,7 @@ switch ($resource) {
             case 'POST':
                 if (isset($input['Nome'])) {
                     $nome = trim($input['Nome']);
-                    if(empty($nome)) {
+                    if (empty($nome)) {
                         echo json_encode(['error' => 'Nome do formador é obrigatório']);
                         exit;
                     }
@@ -318,7 +322,7 @@ switch ($resource) {
                 if (isset($input['AlunoID'], $input['TurmaID'])) {
                     $alunoID = $input['AlunoID'];
                     $turmaID = $input['TurmaID'];
-                    
+
                     try {
                         $stmt = $pdo->prepare('INSERT INTO matricula (AlunoID, TurmaID) VALUES (?, ?)');
                         $stmt->execute([$alunoID, $turmaID]);
@@ -355,7 +359,7 @@ switch ($resource) {
                     $formadorID = $input['FormadorID'];
                     $turmaID = $input['TurmaID'];
                     $moduloID = $input['ModuloID'];
-                    
+
                     try {
                         $stmt = $pdo->prepare('INSERT INTO leciona (FormadorID, TurmaID, ModuloID) VALUES (?, ?, ?)');
                         $stmt->execute([$formadorID, $turmaID, $moduloID]);
@@ -396,7 +400,7 @@ switch ($resource) {
                     echo json_encode(['error' => 'Dados incompletos para registrar curso']);
                 }
                 break;
-            }
+        }
         break;
 
     case 'matriculas_com_aluno':
@@ -407,11 +411,10 @@ switch ($resource) {
         ');
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($rows);
-    break;
+        break;
 
 
     default:
         echo json_encode(['error' => 'Recurso inválido']);
         break;
 }
-?>

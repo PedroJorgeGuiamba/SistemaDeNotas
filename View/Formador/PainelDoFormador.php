@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/../../middleware/auth.php'; // protege a página e inicia a sessão
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -14,7 +18,7 @@
             <div class="card-header">Ações Administrativas</div>
             <div class="card-body">
                 <a href="index.php?action=exibir_lancar_nota" class="btn btn-primary mb-2">Lancar Nota</a>
-                <a href="index.php?action=exibir_notas_aluno" class="btn btn-primary mb-2">Visualizar Notas dos Alunos</a>
+                <a href="index.php?action=exibir_notas" class="btn btn-primary mb-2">Visualizar Notas dos Alunos</a>
             </div>
         </div>
         <div class="card">
@@ -34,7 +38,7 @@
                 ?>
             </div>
         </div>
-        <a href="index.php?action=exibir_login" class="btn btn-secondary mt-3">Sair</a>
+        <a href="index.php?action=logout" class="btn btn-secondary mt-3">Sair</a>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
